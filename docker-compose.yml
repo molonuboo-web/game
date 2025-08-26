@@ -1,0 +1,7 @@
+services:
+  sgdk:
+    image: jdesiloniz/sgdk:latest
+    working_dir: /project
+    volumes:
+      - .:/project
+    command: sh -lc "make clean && make && ls -l out"

@@ -1,0 +1,15 @@
+Демьяникус — сборка ROM одним шагом
+
+A) Windows:
+  set GDK=C:\SGDK
+  build.bat
+
+B) Linux/Mac:
+  export GDK=~/SGDK
+  sh build.sh
+
+C) Docker:
+  docker compose up --build
+
+D) GitHub Actions:
+  Залей в репозиторий — workflow соберёт ROM и приложит out/rom.bin как Artifact.
