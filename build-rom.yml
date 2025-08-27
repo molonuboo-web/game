@@ -1,22 +1,39 @@
 name: Build ROM
+
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Build with Docker SGDK
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show tree (debug)
+        run: |
+          pwd
+          ls -la
+          echo "--- src ---"; ls -la src || true
+          echo "--- res ---"; ls -la res || true
+          echo "--- makefile ---"; sed -n '1,50p' makefile || true
+
+      - name: Build with SGDK in Docker
         uses: addnab/docker-run-action@v3
         with:
-          image: jdesiloniz/sgdk:latest
-          options: -v ${{ github.workspace }}:/project -w /project
-          run: |
-            make clean
-            make
-            ls -l out
+            image: jdesiloniz/sgdk:latest
+            options: -v ${{ github.workspace }}:/project -w /project
+            run: |
+              set -e
+              export GDK=/opt/sgdk
+              echo "GDK=$GDK"
+              make -v
+              make clean
+              make
+              ls -la out
+
       - name: Upload ROM artifact
         uses: actions/upload-artifact@v4
         with:
